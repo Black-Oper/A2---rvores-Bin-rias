@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/pedromiguel/Documents/Estudos/5 semestre/Estruturas de Dados/rubro-negra/output/main'
+relocations:     []
+...
