@@ -3,6 +3,7 @@
 #include <string.h>
 #include "funcoes.h"
 
+// Struct do Nó
 struct No {
     char nome[50];
     int id;
@@ -14,18 +15,22 @@ struct No {
 
 typedef struct No No;
 
+// Função para calcular a altura do nó
 int altura_no(No *no) {
     return (no == NULL) ? -1 : no->alt;
 }
 
+// Retorna o maior entre dois números inteiros.
 int maior(int a, int b) {
     return (a > b) ? a : b;
 }
 
+// Calcula o fator de balanceamento de um nó (altura da esquerda - altura da direita).
 int fator_balanceamento_no(No *no) {
     return altura_no(no->esq) - altura_no(no->dir);
 }
 
+// Realiza a rotação simples à esquerda (LL) em um nó.
 No *rotacao_ll(No *raiz) {
     No *filho = raiz->esq;
     raiz->esq = filho->dir;
@@ -35,6 +40,7 @@ No *rotacao_ll(No *raiz) {
     return filho;
 }
 
+// Realiza a rotação simples à direita (RR) em um nó.
 No *rotacao_rr(No *raiz) {
     No *filho = raiz->dir;
     raiz->dir = filho->esq;
@@ -44,16 +50,19 @@ No *rotacao_rr(No *raiz) {
     return filho;
 }
 
+// Realiza a rotação dupla à esquerda (LR) em um nó.
 No *rotacao_lr(No *raiz) {
     raiz->esq = rotacao_rr(raiz->esq);
     return rotacao_ll(raiz);
 }
 
+// Realiza a rotação dupla à direita (RL) em um nó.
 No *rotacao_rl(No *raiz) {
     raiz->dir = rotacao_ll(raiz->dir);
     return rotacao_rr(raiz);
 }
 
+// Cria e retorna um novo nó de usuário com os dados fornecidos.
 No *cria_usuario(const char *nome, int id, const char *email) {
     No *novo = (No*)malloc(sizeof(No));
     if (!novo) {
@@ -68,6 +77,7 @@ No *cria_usuario(const char *nome, int id, const char *email) {
     return novo;
 }
 
+// Insere um novo usuário na árvore AVL, realizando rotações para manter o balanceamento.
 No *insere_AVLTree(No *raiz, const char *nome, int id, const char *email) {
     if (raiz == NULL)
         return cria_usuario(nome, id, email);
@@ -98,6 +108,7 @@ No *insere_AVLTree(No *raiz, const char *nome, int id, const char *email) {
     return raiz;
 }
 
+// Retorna o nó com o menor valor (mais à esquerda) em uma subárvore.
 No *menorValor(No *no) {
     No *atual = no;
     while (atual->esq)
@@ -105,6 +116,7 @@ No *menorValor(No *no) {
     return atual;
 }
 
+// Remove um usuário da árvore com base no nome, ajustando a estrutura AVL.
 No *remover(No *raiz, const char *nome) {
     if (raiz == NULL)
         return raiz;
@@ -153,6 +165,7 @@ No *remover(No *raiz, const char *nome) {
     return raiz;
 }
 
+// Busca um usuário pelo nome e retorna o ponteiro para o nó se encontrado.
 No *buscar(No *raiz, const char *nome) {
     if (raiz == NULL || strcmp(nome, raiz->nome) == 0)
         return raiz;
@@ -162,6 +175,7 @@ No *buscar(No *raiz, const char *nome) {
         return buscar(raiz->dir, nome);
 }
 
+// Percorre a árvore em ordem alfabética (em-ordem) e imprime os dados dos usuários.
 void inOrder(No *raiz) {
     if (raiz) {
         inOrder(raiz->esq);
@@ -170,6 +184,7 @@ void inOrder(No *raiz) {
     }
 }
 
+// Libera recursivamente todos os nós da árvore da memória.
 void freeTree(No *raiz) {
     if (raiz) {
         freeTree(raiz->esq);
@@ -178,6 +193,7 @@ void freeTree(No *raiz) {
     }
 }
 
+// Função principal: exibe o menu e gerencia as interações do usuário com a árvore AVL.
 int main(void) {
     No *raiz = NULL;
 

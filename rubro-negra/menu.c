@@ -6,7 +6,7 @@
 
 // Função para exibir um menu básico
 int menu(const char *titulo, Item *itens, bool sair) {
-    system("clear");
+    limpa_tela();
 
     char concluido[100];
     snprintf(concluido, sizeof(concluido), "MENU : %s", titulo);

@@ -18,6 +18,7 @@ typedef struct Node {
     struct Node *left, *right, *parent;
 } Node;
 
+/* Cria um novo nó Rubro-Negro com o produto dado, cor RED e ponteiros nulos */
 Node* createNode(Product p) {
     Node* n = (Node*)malloc(sizeof(Node));
     n->prod = p;
@@ -26,6 +27,7 @@ Node* createNode(Product p) {
     return n;
 }
 
+/* Realiza rotação à esquerda em torno de x, retornando a nova raiz */
 Node* rotateLeft(Node* root, Node* x) {
     Node* y = x->right;
     x->right = y->left;
@@ -48,6 +50,7 @@ Node* rotateLeft(Node* root, Node* x) {
     return root;
 }
 
+/* Realiza rotação à direita em torno de y, retornando a nova raiz */
 Node* rotateRight(Node* root, Node* y) {
     Node* x = y->left;
     y->left = x->right;
@@ -71,6 +74,7 @@ Node* rotateRight(Node* root, Node* y) {
     return root;
 }
 
+/* Insere n em uma BST simples com base no código do produto */
 Node* bstInsert(Node* root, Node* n) {
     if (!root) {
         return n;
@@ -86,6 +90,7 @@ Node* bstInsert(Node* root, Node* n) {
     return root;
 }
 
+/* Reequilibra a árvore após inserção, corrigindo cores e rotações */
 Node* fixInsert(Node* root, Node* z) {
     Node *uncle;
     while (z != root && z->parent && z->parent->color == RED) {
@@ -128,6 +133,7 @@ Node* fixInsert(Node* root, Node* z) {
     return root;
 }
 
+/* Insere um produto criando o nó, inserindo em BST e ajustando cores */
 Node* insert(Node* root, Product p) {
     Node* n = createNode(p);
     root = bstInsert(root, n);
@@ -135,6 +141,7 @@ Node* insert(Node* root, Product p) {
     return root;
 }
 
+/* Percorre a árvore em ordem e imprime cada produto formatado */
 void inorderPrint(Node* root) {
     if (!root) {
         return;
@@ -152,6 +159,7 @@ void inorderPrint(Node* root) {
     inorderPrint(root->right);
 }
 
+/* Busca recursivamente um nó pelo código do produto */
 Node* search(Node* root, int code) {
     if (!root || root->prod.code == code) {
         return root;
@@ -163,6 +171,7 @@ Node* search(Node* root, int code) {
     }
 }
 
+/* Substitui o subárvore em u pela subárvore em v, ajustando pais */
 void transplant(Node** root, Node* u, Node* v) {
     if (!u->parent){
         *root = v;
@@ -177,6 +186,7 @@ void transplant(Node** root, Node* u, Node* v) {
     }
 }
 
+/* Retorna o nó de menor chave na subárvore de x (extremo à esquerda) */
 Node* treeMinimum(Node* x) {
     while (x->left) {
         x = x->left;
@@ -184,6 +194,7 @@ Node* treeMinimum(Node* x) {
     return x;
 }
 
+/* Reequilibra a árvore após remoção, corrigindo cores e rotações */
 Node* fixRemove(Node* root, Node* x) {
     Node *w;
     while (x != root && (!x || x->color == BLACK)) {
@@ -258,6 +269,7 @@ Node* fixRemove(Node* root, Node* x) {
     return root;
 }
 
+/* Remove o nó com dado código e reequilibra se necessário */
 Node* removeNode(Node* root, int code) {
     Node *z = search(root, code);
     if (!z) return root;
@@ -294,6 +306,7 @@ Node* removeNode(Node* root, int code) {
     return root;
 }
 
+/* Função principal: exibe menu e processa operações de inventário */
 int main() {
     Node* root = NULL;
     int op = -1;
@@ -314,25 +327,19 @@ int main() {
         {
         case 1: {
             Product p;
-
             printf("Código: ");
             scanf("%d", &p.code);
             limpa_buffer();
-
             printf("Nome: ");
             scanf(" %49[^\n]", p.name);
             limpa_buffer();
-
             printf("Quantidade: ");
             scanf("%d", &p.quantity);
             limpa_buffer();
-
             printf("Preço unitário: ");
             scanf("%f", &p.price);
             limpa_buffer();
-
             root = insert(root, p);
-
             printf("Produto cadastrado!\n");
             esperar_enter();
             break;
@@ -343,9 +350,7 @@ int main() {
             printf("Código do produto a remover: ");
             scanf("%d", &code);
             limpa_buffer();
-
             root = removeNode(root, code);
-
             printf("Operação de remoção realizada.\n");
             esperar_enter();
             break;
@@ -353,13 +358,10 @@ int main() {
 
         case 3: {
             int code;
-
             printf("Código do produto a buscar: ");
             scanf("%d", &code);
             limpa_buffer();
-
             Node* f = search(root, code);
-
             if (f) {
                 printf("Encontrado: %d | %-20s | Qtde: %d | Preço: %.2f | Cor: %c\n",
                        f->prod.code, f->prod.name, f->prod.quantity, f->prod.price,
